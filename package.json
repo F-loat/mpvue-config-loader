@@ -1,0 +1,30 @@
+{
+  "name": "mpvue-config-loader",
+  "version": "0.0.1",
+  "description": "mpvue 单文件页面配置",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/F-loat/mpvue-config-loader.git"
+  },
+  "keywords": [
+    "mpvue",
+    "config",
+    "loader"
+  ],
+  "author": "F-loat <chaimaoyuan@foxmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/F-loat/mpvue-config-loader/issues"
+  },
+  "homepage": "https://github.com/F-loat/mpvue-config-loader#readme",
+  "dependencies": {
+    "@babel/generator": "^7.1.6",
+    "@babel/parser": "^7.1.6",
+    "@babel/traverse": "^7.1.6",
+    "@babel/types": "^7.1.6"
+  }
+}
