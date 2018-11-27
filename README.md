@@ -40,3 +40,7 @@ export default {
 }
 </script>
 ```
+
+## Tips
+
+`config` 属性会转换为一个 json 文件，故其中不可使用变量，如需动态修改配置请使用小程序官方的 API
