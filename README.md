@@ -21,8 +21,10 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'mpvue-config-loader',
-        include: [resolve('src/pages')],
-        exclude: [resolve('src/components')]
+        exclude: [resolve('src/components')],
+        options: {
+          entry: './main.js'
+        }
       },
       ...
     ]
@@ -41,6 +43,13 @@ export default {
 }
 </script>
 ```
+
+## Options
+
+| property | type | required | describe |
+| :-: | :-: | :-: | :-: |
+| entry | string | false | 入口文件相对路径 |
+| transform | function | false | 自定义文件名转换函数 |
 
 ## Tips
 
