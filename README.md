@@ -1,5 +1,12 @@
 # mpvue-config-loader
 
+> mpvue 单文件页面配置
+
+[![npm package](https://img.shields.io/npm/v/mpvue-config-loader.svg)](https://npmjs.org/package/mpvue-config-loader)
+[![npm downloads](https://img.shields.io/npm/dw/mpvue-config-loader.svg)](https://npmjs.org/package/mpvue-config-loader)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/F-loat/mpvue-config-loader/blob/master/LICENSE)
+[![juejin](https://badge.juejin.im/entry/5bffd5de51882526a643fcd1/likes.svg)](https://juejin.im/post/5bffd5de51882526a643fcd1)
+
 ## 安装
 
 ``` bash
