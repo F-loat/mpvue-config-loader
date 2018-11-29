@@ -3,12 +3,18 @@ const traverse = require('@babel/traverse').default
 const generate = require('@babel/generator').default
 const t = require('@babel/types')
 
+function getObjectKey(prop) {
+  const { key } = prop
+  return t.isIdentifier(key) ? key.name : key.value
+}
+
 function traverseObjectNode(node) {
   if (node.type === 'ObjectProperty') {
     const { properties } = node.value
 
     return properties.reduce((result, prop) => {
-      result[prop.key.name] = traverseObjectNode(prop.value)
+      const key = getObjectKey(prop)
+      result[key] = traverseObjectNode(prop.value)
       return result
     }, {})
   }
@@ -17,10 +23,10 @@ function traverseObjectNode(node) {
     const { properties } = node
 
     return properties.reduce((result, prop) => {
-      const key = t.isIdentifier(prop.key) ? prop.key.name : prop.key.value
+      const key = getObjectKey(prop)
       result[key] = traverseObjectNode(prop.value)
       return result
-    }, {})
+    })
   }
 
   if (node.type === 'ArrayExpression') {
