@@ -9,31 +9,19 @@ function getObjectKey(prop) {
 }
 
 function traverseObjectNode(node) {
-  if (node.type === 'ObjectProperty') {
-    const { properties } = node.value
+  const isObjectExpression = t.isObjectExpression(node)
+  const isObjectProperty = t.isObjectProperty(node)
 
+  if (isObjectExpression || isObjectProperty) {
+    const { properties } = isObjectExpression ? node : node.value
     return properties.reduce((result, prop) => {
       const key = getObjectKey(prop)
       result[key] = traverseObjectNode(prop.value)
       return result
     }, {})
-  }
-
-  if (node.type === 'ObjectExpression') {
-    const { properties } = node
-
-    return properties.reduce((result, prop) => {
-      const key = getObjectKey(prop)
-      result[key] = traverseObjectNode(prop.value)
-      return result
-    })
-  }
-
-  if (node.type === 'ArrayExpression') {
+  } else if (t.isArrayExpression(node)) {
     return node.elements.map(item => traverseObjectNode(item))
-  }
-
-  if (node.type === 'NullLiteral') {
+  } else if (t.isNullLiteral(node)) {
     return null
   }
 
@@ -52,7 +40,7 @@ module.exports = function (source) {
         const { node, parentPath } = astPath
         const { container } = parentPath
 
-        if (container.type === 'ExportDefaultDeclaration' && node.key.name === 'config') {
+        if (t.isExportDefaultDeclaration(container) && node.key.name === 'config') {
           configObj = traverseObjectNode(node)
           emitFile(`${fileName}.json`, JSON.stringify(configObj, null, 2))
           astPath.remove()
