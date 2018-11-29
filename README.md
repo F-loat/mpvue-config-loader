@@ -15,13 +15,14 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        use: [
-          {
-            loader: 'mpvue-loader',
-            options: vueLoaderConfig
-          },
-          'mpvue-config-loader'
-        ]
+        loader: 'mpvue-loader',
+        options: vueLoaderConfig
+      },
+      {
+        test: /\.vue$/,
+        loader: 'mpvue-config-loader',
+        include: [resolve('src/pages')],
+        exclude: [resolve('src/components')]
       },
       ...
     ]
