@@ -1,6 +1,6 @@
 {
   "name": "mpvue-config-loader",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "mpvue 单文件页面配置",
   "main": "index.js",
   "scripts": {
