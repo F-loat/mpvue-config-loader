@@ -1,23 +1,9 @@
 const path = require('path')
 const { getOptions } = require('loader-utils')
-const validateOptions = require('schema-utils')
 const parser = require('@babel/parser')
 const traverse = require('@babel/traverse').default
 const generate = require('@babel/generator').default
 const t = require('@babel/types')
-
-const schema = {
-  type: 'object',
-  properties: {
-    entry: {
-      type: 'string'
-    },
-    transform: {
-      instanceof: 'Function'
-    }
-  },
-  additionalProperties: true
-}
 
 function getObjectKey(prop) {
   const { key } = prop
@@ -44,8 +30,8 @@ function traverseObjectNode(node) {
   return node.value
 }
 
-function generateFile(configObj, resourcePath, emitFile, options = {}) {
-  const { entry, transform } = options;
+function generateFile(configObj, resourcePath, emitFile, options) {
+  const { entry, transform } = options || {};
 
   let fileName = resourcePath.replace(/^.*src\\/, '').replace(/\.vue$/, '')
 
@@ -63,8 +49,6 @@ function generateFile(configObj, resourcePath, emitFile, options = {}) {
 module.exports = function (source) {
   const { resourcePath, emitFile } = this
   const options = getOptions(this);
-  
-  validateOptions(schema, options, 'MPVue Config Loader')
 
   return source.replace(/<script>([^]*)<\/script>/, (match, $1) => {
     const ast = parser.parse($1, { sourceType: 'module' });
