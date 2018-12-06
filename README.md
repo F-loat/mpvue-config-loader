@@ -1,6 +1,6 @@
 # mpvue-config-loader
 
-> mpvue 单文件页面配置
+> mpvue 单文件页面配置，支持全局配置
 
 [![npm package](https://img.shields.io/npm/v/mpvue-config-loader.svg)](https://npmjs.org/package/mpvue-config-loader)
 [![npm downloads](https://img.shields.io/npm/dw/mpvue-config-loader.svg)](https://npmjs.org/package/mpvue-config-loader)
@@ -41,6 +41,22 @@ module.exports = {
 ```
 
 ``` vue
+// src/app.vue
+export default {
+  config: {
+    window: {
+      navigationBarTitleText: '小程序标题'
+    }
+  },
+  globalConfig: {
+    usingComponents: [
+      ...
+    ]
+  }
+}
+```
+
+``` vue
 <script>
 // src/xx/xxx.vue
 export default {
@@ -60,4 +76,6 @@ export default {
 
 ## Tips
 
-`config` 属性会转换为一个 json 文件，故其中不可使用变量，如需动态修改配置请使用小程序官方的 API
+* `config` 属性会转换为一个 json 文件，故其中不可使用变量，如需动态修改配置请使用小程序官方的 API
+
+* app.vue 文件的 `globalConfig` 属性会与页面配置进行合并，可实现全局引用原生组件

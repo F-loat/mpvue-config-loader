@@ -4,6 +4,15 @@ const parser = require('@babel/parser')
 const traverse = require('@babel/traverse').default
 const generate = require('@babel/generator').default
 const t = require('@babel/types')
+const mergeWith = require('lodash.mergewith')
+
+let globalConfig = null
+
+function customizer(objValue, srcValue) {
+  if (Array.isArray(objValue)) {
+    return objValue.concat(srcValue)
+  }
+}
 
 function getObjectKey(prop) {
   const { key } = prop
@@ -58,9 +67,18 @@ module.exports = function (source) {
         const { node, parentPath } = astPath
         const { container } = parentPath
 
-        if (t.isExportDefaultDeclaration(container) && node.key.name === 'config') {
-          configObj = traverseObjectNode(node)
+        if (!t.isExportDefaultDeclaration(container)) {
+          return
+        }
+
+        if (node.key.name === 'config') {
+          configObj = mergeWith(globalConfig, traverseObjectNode(node), customizer);
           generateFile(configObj, resourcePath, emitFile, options)
+          astPath.remove()
+        }
+
+        if (node.key.name === 'globalConfig') {
+          globalConfig = traverseObjectNode(node)
           astPath.remove()
         }
       }
