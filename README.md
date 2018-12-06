@@ -41,6 +41,7 @@ module.exports = {
 ```
 
 ``` vue
+<script>
 // src/app.vue
 export default {
   config: {
@@ -54,6 +55,7 @@ export default {
     ]
   }
 }
+</script>
 ```
 
 ``` vue
