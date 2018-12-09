@@ -81,3 +81,5 @@ export default {
 * `config` 属性会转换为一个 json 文件，故其中不可使用变量，如需动态修改配置请使用小程序官方的 API
 
 * app.vue 文件的 `globalConfig` 属性会与页面配置进行合并，可实现全局引用原生组件
+
+* 页面若无 `config` 属性，请指定 `mpType: 'page'` 以生成全局配置
