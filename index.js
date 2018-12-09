@@ -6,12 +6,19 @@ const generate = require('@babel/generator').default
 const t = require('@babel/types')
 const mergeWith = require('lodash.mergewith')
 
+let configs = {}
 let globalConfig = null
+let currentType = null
 
 function customizer(objValue, srcValue) {
   if (Array.isArray(objValue)) {
     return objValue.concat(srcValue)
   }
+}
+
+function emitConfig(fileName, configObj, emitFile) {
+  const mergedConfig = mergeWith({}, globalConfig, configObj, customizer)
+  emitFile(`${fileName}.json`, JSON.stringify(mergedConfig, null, 2))
 }
 
 function getObjectKey(prop) {
@@ -52,7 +59,13 @@ function generateFile(configObj, resourcePath, emitFile, options) {
     fileName = transform(fileName, resourcePath)
   }
 
-  emitFile(`${fileName}.json`, JSON.stringify(configObj, null, 2))
+  configs[fileName] = configObj
+
+  emitConfig(fileName, configObj, emitFile)
+}
+
+function regenerateFile(emitFile) {
+  Object.keys(configs).forEach(key => emitConfig(key, configs[key], emitFile))
 }
 
 module.exports = function (source) {
@@ -63,6 +76,16 @@ module.exports = function (source) {
     const ast = parser.parse($1, { sourceType: 'module' });
 
     traverse(ast, {
+      ExportDefaultDeclaration: {
+        enter() {
+          currentType = null
+        },
+        exit() {
+          if (currentType === 'page' && !!globalConfig) {
+            generateFile({}, resourcePath, emitFile, options)
+          }
+        }
+      },
       ObjectProperty(astPath) {
         const { node, parentPath } = astPath
         const { container } = parentPath
@@ -71,15 +94,21 @@ module.exports = function (source) {
           return
         }
 
-        if (node.key.name === 'config') {
-          configObj = mergeWith(globalConfig, traverseObjectNode(node), customizer);
-          generateFile(configObj, resourcePath, emitFile, options)
-          astPath.remove()
-        }
-
-        if (node.key.name === 'globalConfig') {
-          globalConfig = traverseObjectNode(node)
-          astPath.remove()
+        switch (node.key.name) {
+          case 'mpType':
+            currentType = node.value.value
+            break
+          case 'config':
+            currentType = null
+            configObj = traverseObjectNode(node);
+            generateFile(configObj, resourcePath, emitFile, options)
+            astPath.remove()
+            break
+          case 'globalConfig':
+            globalConfig = traverseObjectNode(node)
+            regenerateFile(emitFile)
+            astPath.remove()
+            break
         }
       }
     })
