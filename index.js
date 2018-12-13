@@ -49,7 +49,7 @@ function traverseObjectNode(node) {
 function generateFile(configObj, resourcePath, emitFile, options) {
   const { entry, transform } = options || {};
 
-  let fileName = resourcePath.replace(/^.*src\\/, '').replace(/\.vue$/, '')
+  let fileName = resourcePath.replace(/^.*src[\\\/]/, '').replace(/\.vue$/, '')
 
   if (fileName === 'App' || fileName === 'app') {
     fileName = fileName.toLowerCase()
