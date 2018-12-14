@@ -1,6 +1,6 @@
 # mpvue-config-loader
 
-> mpvue 单文件页面配置，支持全局配置
+> 实现在 vue 文件中书写小程序的页面配置，不再需要单独的 main.json 文件
 
 [![npm package](https://img.shields.io/npm/v/mpvue-config-loader.svg)](https://npmjs.org/package/mpvue-config-loader)
 [![npm downloads](https://img.shields.io/npm/dw/mpvue-config-loader.svg)](https://npmjs.org/package/mpvue-config-loader)
