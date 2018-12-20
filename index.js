@@ -26,7 +26,7 @@ function getObjectKey(prop) {
   return t.isIdentifier(key) ? key.name : key.value
 }
 
-function traverseObjectNode(node) {
+function traverseObjectNode(node, parentKey) {
   const isObjectExpression = t.isObjectExpression(node)
   const isObjectProperty = t.isObjectProperty(node)
 
@@ -34,13 +34,17 @@ function traverseObjectNode(node) {
     const { properties } = isObjectExpression ? node : node.value
     return properties.reduce((result, prop) => {
       const key = getObjectKey(prop)
-      result[key] = traverseObjectNode(prop.value)
+      result[key] = traverseObjectNode(prop.value, parentKey || key)
       return result
     }, {})
   } else if (t.isArrayExpression(node)) {
     return node.elements.map(item => traverseObjectNode(item))
   } else if (t.isNullLiteral(node)) {
     return null
+  }
+
+  if (parentKey === 'usingComponents' && !path.isAbsolute(node.value)) {
+    return `/${node.value}`
   }
 
   return node.value
